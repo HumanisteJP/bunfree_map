@@ -57,10 +57,18 @@ const App = () => {
     <>
       <CssBaseline />
       <div className="App">
+        <Container sx={{ maxWidth: 840 }}>
         <Typography variant="h5" gutterBottom>
           文学フリマ東京39 ブース検索サイト
         </Typography>
-        <Container sx={{ maxWidth: 840 }}>
+        <Typography variant="body1" gutterBottom>
+          <Link
+            href={`https://bunfree.net/event/tokyo39/`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >文学フリマ東京39</Link>
+          のブースの位置情報をブース名、ジャンル、SNSアカウント名から検索できます。
+        </Typography>
           <TextField
             fullWidth
             variant="outlined"
