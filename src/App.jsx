@@ -80,7 +80,7 @@ const App = () => {
     <>
       <CssBaseline />
       <div className="App" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", minHeight: "100vh" }}>
-        <Container sx={{ maxWidth: 840 }}>
+        <Container sx={{ maxWidth: { xs: 360, sm: 840 } }}> {/* スマホ対応の最大幅 */}
           <Stack spacing={2}>
             <Box>
               <Box display="flex" justifyContent="flex-end" alignItems="center">
@@ -112,18 +112,35 @@ const App = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
               onKeyDown={handleKeyDown} // キー入力イベントを追加
+              onBlur={handleSearch} // フォーカスが外れたときに検索を実行
               style={{ marginBottom: "20px" }}
             />
 
             {/* 地図エリア */}
-            <div id="map-container">
+            <div
+              id="map-container"
+              style={{
+                width: "100%",
+                maxWidth: "100%",
+                height: "300px", // スマホ対応で高さ固定
+                position: "relative",
+                border: "1px solid #ccc",
+                marginTop: "10px",
+              }}
+            >
               {filteredBooths.map((booth) => (
                 <div
                   key={booth.id}
                   className="marker"
                   style={{
+                    width: "16px", // タップしやすいサイズ
+                    height: "16px",
                     left: `${booth.x * 100}%`,
                     top: `${booth.y * 100}%`,
+                    position: "absolute",
+                    backgroundColor: "blue",
+                    borderRadius: "50%",
+                    transform: "translate(-50%, -50%)",
                   }}
                   onClick={() => handleMarkerClick(booth.id)}
                   title={booth.name}
@@ -153,30 +170,6 @@ const App = () => {
                       エリア: {booth.area} / {booth.area_number}
                     </Typography>
                     <Typography variant="body2">{booth.detail}</Typography>
-                    {booth.twitter && (
-                      <Typography variant="body2">
-                        X (Twitter)：
-                        <Link
-                          href={`https://x.com/${booth.twitter.slice(1)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {booth.twitter}
-                        </Link>
-                      </Typography>
-                    )}
-                    {booth.instagram && (
-                      <Typography variant="body2">
-                        Instagram：
-                        <Link
-                          href={`https://www.instagram.com/${booth.instagram}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {booth.instagram}
-                        </Link>
-                      </Typography>
-                    )}
                   </CardContent>
                 </Card>
               ))}
@@ -203,6 +196,49 @@ const App = () => {
           © 2024 humanistejp. All rights reserved.
         </Typography>
       </footer>
+
+      {/* モーダル */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "90%", // モーダル幅をスマホ対応
+              maxWidth: "400px",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+              textAlign: "left",
+              overflow: "auto", // モーダル内容が長い場合にスクロール可能
+              maxHeight: "80vh",
+            }}
+          >
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Typography variant="h6">
+                ヘルプ
+              </Typography>
+              <IconButton onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+            <Typography variant="body2" paddingTop={2}>
+              文学フリマ東京39のブースの位置情報をブース名、ジャンル、SNSアカウント名から検索できます。
+            </Typography>
+          </Box>
+        </Fade>
+      </Modal>
     </>
   );
 };
