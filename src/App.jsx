@@ -138,6 +138,17 @@ const App = () => {
           </Box>
         </Container>
       </div>
+      <footer style={{ marginTop: "40px", padding: "20px", backgroundColor: "#f8f9fa", textAlign: "center" }}>
+        <Typography variant="body2">
+          © 2024 humanistejp. All rights reserved.
+        </Typography>
+        <Typography variant="body2">
+          GitHub リポジトリ：
+          <Link href="https://github.com/HumanisteJP/bunfree_map/" target="_blank" rel="noopener noreferrer">
+            https://github.com/HumanisteJP/bunfree_map/
+          </Link>
+        </Typography>
+      </footer>
     </>
   );
 };
