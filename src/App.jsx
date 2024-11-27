@@ -53,6 +53,7 @@ const App = () => {
     const filtered = booths.filter((booth) => {
       return (
         booth.name?.toLowerCase().includes(searchQuery) ||
+        booth.yomi_of_name?.toLowerCase().includes(searchQuery) ||
         booth.category?.toLowerCase().includes(searchQuery) ||
         booth.twitter?.toLowerCase().includes(searchQuery) ||
         enableDetailSearch && booth.detail?.toLowerCase().includes(searchQuery) ||
