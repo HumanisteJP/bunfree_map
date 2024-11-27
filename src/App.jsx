@@ -254,7 +254,7 @@ const App = () => {
               Twitterの場合「@bunfree」
             </Typography>
             <Typography variant="body2" >
-              instagramの場合「bunfree」
+              Instagramの場合「bunfree」
             </Typography>
             <br/>
             <Typography variant="body2" >
