@@ -113,7 +113,7 @@ const App = () => {
               >
                 文学フリマ東京39
               </Link>
-              のブースの位置情報をブース、カテゴリ、SNSから検索できます。
+              のブースの位置情報をブース名、カテゴリ、SNSから検索できます。
             </Typography>
             <TextField
               fullWidth
