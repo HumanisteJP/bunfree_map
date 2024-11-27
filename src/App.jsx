@@ -87,11 +87,11 @@ const App = () => {
       <CssBaseline />
       <div className="App" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", minHeight: "100vh" }}>
         <Container sx={{
-          maxWidth: 840,
+          maxWidth: 640,
           display: 'flex',
           justifyContent: 'center'
         }}>
-          <Stack spacing={2} maxWidth={840} width={"100%"}>
+          <Stack spacing={2} maxWidth={640} width={"100%"}>
             <Box>
               <Box display="flex" justifyContent="flex-end" alignItems="center">
                 <IconButton onClick={handleOpen}>
@@ -143,12 +143,12 @@ const App = () => {
             </div>
 
             {/* 検索結果リスト */}
-            <Box mt={4} maxWidth={840}>
+            <Box mt={4} maxWidth={640}>
               {filteredBooths.map((booth) => (
                 <Card
                   key={booth.id}
                   ref={(el) => (cardRefs.current[booth.id] = el)} // 各カードの参照を設定
-                  style={{ marginBottom: "15px", padding: "10px",maxWidth: 840 }}
+                  style={{ marginBottom: "15px", padding: "10px",maxWidth: 640 }}
                 >
                   <CardContent>
                     <Typography variant="h6">
