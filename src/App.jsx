@@ -1,11 +1,27 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
-import { CssBaseline, TextField, Typography, Card, CardContent, Container, Box, Link } from "@mui/material";
+import { 
+  CssBaseline, 
+  TextField, 
+  Typography, 
+  Card, 
+  CardContent, 
+  Container, 
+  Box, 
+  Link, 
+  IconButton, 
+  Modal, 
+  Backdrop, 
+  Fade 
+} from "@mui/material";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import CloseIcon from "@mui/icons-material/Close";
 
 const App = () => {
   const [booths, setBooths] = useState([]);
   const [filteredBooths, setFilteredBooths] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [open, setOpen] = useState(false); // モーダルの開閉状態
   const cardRefs = useRef({}); // 各カードの参照を保持
 
   // JSONデータを読み込む
@@ -35,6 +51,7 @@ const App = () => {
         booth.name?.toLowerCase().includes(searchQuery) ||
         booth.category?.toLowerCase().includes(searchQuery) ||
         booth.twitter?.toLowerCase().includes(searchQuery) ||
+        booth.detail?.toLowerCase().includes(searchQuery) ||
         booth.instagram?.toLowerCase().includes(searchQuery)
       );
     });
@@ -53,26 +70,39 @@ const App = () => {
     }
   };
 
+  // モーダルの開閉
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
       <CssBaseline />
-      <div className="App">
+      <div className="App" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", minHeight: "100vh" }}>
         <Container sx={{ maxWidth: 840 }}>
-        <Typography variant="h5" gutterBottom>
-          文学フリマ東京39 ブース検索サイト
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          <Link
-            href={`https://bunfree.net/event/tokyo39/`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >文学フリマ東京39</Link>
-          のブースの位置情報をブース名、ジャンル、SNSアカウント名から検索できます。
-        </Typography>
+          <Box display="flex" justifyContent="flex-end" alignItems="center">
+            <IconButton onClick={handleOpen}>
+              <HelpOutlineIcon />
+            </IconButton>
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <Typography variant="h5" gutterBottom>
+              文学フリマ東京39 ブース検索サイト
+            </Typography>
+          </Box>
+          <Typography variant="body1" gutterBottom>
+            <Link
+              href={`https://bunfree.net/event/tokyo39/`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              文学フリマ東京39
+            </Link>
+            のブースの位置情報をブース、ジャンル、SNS、紹介文から検索できます。
+          </Typography>
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="名前、カテゴリ、SNSアカウントで検索"
+            placeholder="名前、カテゴリ、SNSアカウント、紹介文で検索"
             value={searchQuery}
             onChange={handleSearch}
             style={{ marginBottom: "20px" }}
@@ -146,6 +176,8 @@ const App = () => {
           </Box>
         </Container>
       </div>
+
+      {/* フッター */}
       <footer style={{ marginTop: "40px", padding: "20px", backgroundColor: "#f8f9fa", textAlign: "center" }}>
         <Typography variant="body2">
           © 2024 humanistejp. All rights reserved.
@@ -157,6 +189,67 @@ const App = () => {
           </Link>
         </Typography>
       </footer>
+
+      {/* モーダル */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+              textAlign:"left"
+            }}
+          >
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Typography variant="h6" >
+                ヘルプ
+              </Typography>
+              <IconButton onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </Box>    
+            <Typography variant="body2"  paddingTop={2}>
+              文学フリマ東京39のブースの位置情報をブース名、ジャンル、SNSアカウント名、紹介文から検索できます。
+            </Typography>
+            <Typography variant="body2" >
+              検索方法の例：
+            </Typography>
+            <Typography variant="body2" >
+              ブース名の場合「文学フリマ」
+            </Typography>
+            <Typography variant="body2" >
+              ジャンル名の場合「人文学」
+            </Typography>
+            <Typography variant="body2" >
+              Twitterの場合「@bunfree」
+            </Typography>
+            <Typography variant="body2" >
+              instagramの場合「bunfree」
+            </Typography>
+            <Typography variant="body2" >
+              紹介文の場合「新刊だします」
+            </Typography>      
+            <Typography variant="body2" >
+              使用しているデータは2024/11/27時点のものです。
+            </Typography>
+          </Box>
+        </Fade>
+      </Modal>
     </>
   );
 };
