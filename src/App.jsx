@@ -41,7 +41,7 @@ const App = () => {
 
   // 検索処理
   useEffect(() => {
-    if (searchQuery === "") {
+    if (searchQuery === "" || searchQuery === "@") {
       setFilteredBooths([]);
       return;
     }
@@ -51,7 +51,6 @@ const App = () => {
         booth.name?.toLowerCase().includes(searchQuery) ||
         booth.category?.toLowerCase().includes(searchQuery) ||
         booth.twitter?.toLowerCase().includes(searchQuery) ||
-        booth.detail?.toLowerCase().includes(searchQuery) ||
         booth.instagram?.toLowerCase().includes(searchQuery)
       );
     });
@@ -97,12 +96,12 @@ const App = () => {
             >
               文学フリマ東京39
             </Link>
-            のブースの位置情報をブース、ジャンル、SNS、紹介文から検索できます。
+            のブースの位置情報をブース、ジャンル、SNSから検索できます。
           </Typography>
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="名前、カテゴリ、SNSアカウント、紹介文で検索"
+            placeholder="名前、カテゴリ、SNSアカウントで検索"
             value={searchQuery}
             onChange={handleSearch}
             style={{ marginBottom: "20px" }}
@@ -224,7 +223,7 @@ const App = () => {
               </IconButton>
             </Box>    
             <Typography variant="body2"  paddingTop={2}>
-              文学フリマ東京39のブースの位置情報をブース名、ジャンル、SNSアカウント名、紹介文から検索できます。
+              文学フリマ東京39のブースの位置情報をブース名、ジャンル、SNSアカウント名から検索できます。
             </Typography>
             <Typography variant="body2" >
               検索方法の例：
@@ -241,9 +240,6 @@ const App = () => {
             <Typography variant="body2" >
               instagramの場合「bunfree」
             </Typography>
-            <Typography variant="body2" >
-              紹介文の場合「新刊だします」
-            </Typography>      
             <Typography variant="body2" >
               使用しているデータは2024/11/27時点のものです。
             </Typography>
