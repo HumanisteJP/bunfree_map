@@ -91,7 +91,7 @@ const App = () => {
           display: 'flex',
           justifyContent: 'center'
         }}>
-          <Stack spacing={2} maxWidth={840}>
+          <Stack spacing={2} maxWidth={840} width={"100%"}>
             <Box>
               <Box display="flex" justifyContent="flex-end" alignItems="center">
                 <IconButton onClick={handleOpen}>
