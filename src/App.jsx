@@ -86,7 +86,11 @@ const App = () => {
     <>
       <CssBaseline />
       <div className="App" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", minHeight: "100vh" }}>
-        <Container sx={{ maxWidth: 840 }}>
+        <Container sx={{
+          maxWidth: 840,
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
           <Stack spacing={2} maxWidth={840}>
             <Box>
               <Box display="flex" justifyContent="flex-end" alignItems="center">
@@ -247,7 +251,7 @@ const App = () => {
             <Typography variant="body2" paddingTop={2}>
               文学フリマ東京39のブースの位置情報をブース名、カテゴリ、SNSアカウント名から検索できます。
             </Typography>
-            <br/>
+            <br />
             <Typography variant="body2" >
               検索方法の例：
             </Typography>
@@ -263,18 +267,18 @@ const App = () => {
             <Typography variant="body2" >
               Instagramの場合「bunfree」
             </Typography>
-            <br/>
+            <br />
             <Typography variant="body2" >
               使用しているデータは2024/11/27時点のものです。
             </Typography>
-            <br/>
+            <br />
             <Typography variant="body2" >
               ⚡紹介文検索を有効にする（有効化するとスマホが重くなる可能性があります。「てにをは」などの助詞といった、たくさん検索結果がヒットしそうな単語の検索はお控えください）：
-              </Typography>
+            </Typography>
             <FormControlLabel
-        control={<Switch checked={enableDetailSearch} onChange={handleChange} />}
-        label={enableDetailSearch ? 'ON' : 'OFF'}
-      />
+              control={<Switch checked={enableDetailSearch} onChange={handleChange} />}
+              label={enableDetailSearch ? 'ON' : 'OFF'}
+            />
           </Box>
         </Fade>
       </Modal>
