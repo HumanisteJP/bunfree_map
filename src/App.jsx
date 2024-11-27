@@ -109,7 +109,7 @@ const App = () => {
               >
                 文学フリマ東京39
               </Link>
-              のブースの位置情報をブース、ジャンル、SNSから検索できます。
+              のブースの位置情報をブース、カテゴリ、SNSから検索できます。
             </Typography>
             <TextField
               fullWidth
@@ -245,7 +245,7 @@ const App = () => {
               </IconButton>
             </Box>
             <Typography variant="body2" paddingTop={2}>
-              文学フリマ東京39のブースの位置情報をブース名、ジャンル、SNSアカウント名から検索できます。
+              文学フリマ東京39のブースの位置情報をブース名、カテゴリ、SNSアカウント名から検索できます。
             </Typography>
             <br/>
             <Typography variant="body2" >
@@ -255,7 +255,7 @@ const App = () => {
               ブース名の場合「文学フリマ」
             </Typography>
             <Typography variant="body2" >
-              ジャンル名の場合「人文学」
+              カテゴリ名の場合「人文学」
             </Typography>
             <Typography variant="body2" >
               Twitterの場合「@bunfree」
