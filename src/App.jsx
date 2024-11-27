@@ -14,6 +14,8 @@ import {
   Backdrop,
   Fade,
   Stack,
+  FormControlLabel,
+  Switch
 } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import CloseIcon from "@mui/icons-material/Close";
@@ -23,6 +25,7 @@ const App = () => {
   const [filteredBooths, setFilteredBooths] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false); // モーダルの開閉状態
+  const [enableDetailSearch, setEnableDetailSearch] = useState(false); // 詳細検索の有効化
   const cardRefs = useRef({}); // 各カードの参照を保持
 
   // JSONデータを読み込む
@@ -52,6 +55,7 @@ const App = () => {
         booth.name?.toLowerCase().includes(searchQuery) ||
         booth.category?.toLowerCase().includes(searchQuery) ||
         booth.twitter?.toLowerCase().includes(searchQuery) ||
+        enableDetailSearch && booth.detail?.toLowerCase().includes(searchQuery) ||
         booth.instagram?.toLowerCase().includes(searchQuery)
       );
     });
@@ -75,6 +79,9 @@ const App = () => {
   // モーダルの開閉
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleChange = (event) => {
+    setEnableDetailSearch(event.target.checked);
+  };
   return (
     <>
       <CssBaseline />
@@ -260,6 +267,14 @@ const App = () => {
             <Typography variant="body2" >
               使用しているデータは2024/11/27時点のものです。
             </Typography>
+            <br/>
+            <Typography variant="body2" >
+              ⚡紹介文検索を有効にする（有効化するとスマホが重くなる可能性があります。「てにをは」などの助詞といった、たくさん検索結果がヒットしそうな単語の検索はお控えください）：
+              </Typography>
+            <FormControlLabel
+        control={<Switch checked={enableDetailSearch} onChange={handleChange} />}
+        label={enableDetailSearch ? 'ON' : 'OFF'}
+      />
           </Box>
         </Fade>
       </Modal>
