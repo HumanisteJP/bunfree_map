@@ -1,18 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
-import { 
-  CssBaseline, 
-  TextField, 
-  Typography, 
-  Card, 
-  CardContent, 
-  Container, 
-  Box, 
-  Link, 
-  IconButton, 
-  Modal, 
-  Backdrop, 
-  Fade 
+import {
+  CssBaseline,
+  TextField,
+  Typography,
+  Card,
+  CardContent,
+  Container,
+  Box,
+  Link,
+  IconButton,
+  Modal,
+  Backdrop,
+  Fade,
+  Stack,
 } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import CloseIcon from "@mui/icons-material/Close";
@@ -78,107 +79,112 @@ const App = () => {
       <CssBaseline />
       <div className="App" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", minHeight: "100vh" }}>
         <Container sx={{ maxWidth: 840 }}>
-          <Box display="flex" justifyContent="flex-end" alignItems="center">
-            <IconButton onClick={handleOpen}>
-              <HelpOutlineIcon />
-            </IconButton>
-          </Box>
-          <Box display="flex" justifyContent="center">
-            <Typography variant="h5" gutterBottom>
-              文学フリマ東京39 ブース検索サイト
-            </Typography>
-          </Box>
-          <Typography variant="body1" gutterBottom>
-            <Link
-              href={`https://bunfree.net/event/tokyo39/`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              文学フリマ東京39
-            </Link>
-            のブースの位置情報をブース、ジャンル、SNSから検索できます。
-          </Typography>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="名前、カテゴリ、SNSアカウントで検索"
-            value={searchQuery}
-            onChange={handleSearch}
-            style={{ marginBottom: "20px" }}
-          />
+          <Stack spacing={2}>
+            <Box>
+              <Box display="flex" justifyContent="flex-end" alignItems="center">
+                <IconButton onClick={handleOpen}>
+                  <HelpOutlineIcon />
+                </IconButton>
+              </Box>
+              <Box display="flex" justifyContent="center">
+                <Typography variant="h5" gutterBottom>
+                  文学フリマ東京39 ブース検索サイト
+                </Typography>
+              </Box>
+            </Box>
 
-          {/* 地図エリア */}
-          <div id="map-container">
-            {filteredBooths.map((booth) => (
-              <div
-                key={booth.id}
-                className="marker"
-                style={{
-                  left: `${booth.x * 100}%`,
-                  top: `${booth.y * 100}%`,
-                }}
-                onClick={() => handleMarkerClick(booth.id)}
-                title={booth.name}
-              ></div>
-            ))}
-          </div>
-
-          {/* 検索結果リスト */}
-          <Box mt={4}>
-            {filteredBooths.map((booth) => (
-              <Card
-                key={booth.id}
-                ref={(el) => (cardRefs.current[booth.id] = el)} // 各カードの参照を設定
-                style={{ marginBottom: "15px", padding: "10px" }}
+            <Typography variant="body1" gutterBottom>
+              <Link
+                href={`https://bunfree.net/event/tokyo39/`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <CardContent>
-                  <Typography variant="h6">
-                    <Link href={booth.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {booth.name}
-                    </Link>
-                  </Typography>
-                  <Typography variant="body2">カテゴリ: {booth.category}</Typography>
-                  <Typography variant="body2">
-                    エリア: {booth.area} / {booth.area_number}
-                  </Typography>
-                  <Typography variant="body2">{booth.detail}</Typography>
-                  {booth.twitter && (
-                    <Typography variant="body2">
-                      X (Twitter)：
-                      <Link
-                        href={`https://x.com/${booth.twitter.slice(1)}`}
+                文学フリマ東京39
+              </Link>
+              のブースの位置情報をブース、ジャンル、SNSから検索できます。
+            </Typography>
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="名前、カテゴリ、SNSアカウントで検索"
+              value={searchQuery}
+              onChange={handleSearch}
+              style={{ marginBottom: "20px" }}
+            />
+
+            {/* 地図エリア */}
+            <div id="map-container">
+              {filteredBooths.map((booth) => (
+                <div
+                  key={booth.id}
+                  className="marker"
+                  style={{
+                    left: `${booth.x * 100}%`,
+                    top: `${booth.y * 100}%`,
+                  }}
+                  onClick={() => handleMarkerClick(booth.id)}
+                  title={booth.name}
+                ></div>
+              ))}
+            </div>
+
+            {/* 検索結果リスト */}
+            <Box mt={4}>
+              {filteredBooths.map((booth) => (
+                <Card
+                  key={booth.id}
+                  ref={(el) => (cardRefs.current[booth.id] = el)} // 各カードの参照を設定
+                  style={{ marginBottom: "15px", padding: "10px" }}
+                >
+                  <CardContent>
+                    <Typography variant="h6">
+                      <Link href={booth.url}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {booth.twitter}
+                        {booth.name}
                       </Link>
                     </Typography>
-                  )}
-                  {booth.instagram && (
+                    <Typography variant="body2">カテゴリ: {booth.category}</Typography>
                     <Typography variant="body2">
-                      Instagram：
-                      <Link
-                        href={`https://www.instagram.com/${booth.instagram}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {booth.instagram}
-                      </Link>
+                      エリア: {booth.area} / {booth.area_number}
                     </Typography>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
+                    <Typography variant="body2">{booth.detail}</Typography>
+                    {booth.twitter && (
+                      <Typography variant="body2">
+                        X (Twitter)：
+                        <Link
+                          href={`https://x.com/${booth.twitter.slice(1)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {booth.twitter}
+                        </Link>
+                      </Typography>
+                    )}
+                    {booth.instagram && (
+                      <Typography variant="body2">
+                        Instagram：
+                        <Link
+                          href={`https://www.instagram.com/${booth.instagram}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {booth.instagram}
+                        </Link>
+                      </Typography>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+          </Stack>
         </Container>
       </div>
 
       {/* フッター */}
       <footer style={{ marginTop: "40px", padding: "20px", backgroundColor: "#f8f9fa", textAlign: "center" }}>
-      <Typography variant="body2">
+        <Typography variant="body2">
           作った人：
           <Link href="https://x.com/humanistejp" target="_blank" rel="noopener noreferrer">
             @humanistejp
@@ -217,7 +223,7 @@ const App = () => {
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
-              textAlign:"left"
+              textAlign: "left"
             }}
           >
             <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -227,10 +233,11 @@ const App = () => {
               <IconButton onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
-            </Box>    
-            <Typography variant="body2"  paddingTop={2}>
+            </Box>
+            <Typography variant="body2" paddingTop={2}>
               文学フリマ東京39のブースの位置情報をブース名、ジャンル、SNSアカウント名から検索できます。
             </Typography>
+            <br/>
             <Typography variant="body2" >
               検索方法の例：
             </Typography>
@@ -246,6 +253,7 @@ const App = () => {
             <Typography variant="body2" >
               instagramの場合「bunfree」
             </Typography>
+            <br/>
             <Typography variant="body2" >
               使用しているデータは2024/11/27時点のものです。
             </Typography>
