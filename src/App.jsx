@@ -87,7 +87,7 @@ const App = () => {
       <CssBaseline />
       <div className="App" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", minHeight: "100vh" }}>
         <Container sx={{ maxWidth: 840 }}>
-          <Stack spacing={2}>
+          <Stack spacing={2} maxWidth={840}>
             <Box>
               <Box display="flex" justifyContent="flex-end" alignItems="center">
                 <IconButton onClick={handleOpen}>
