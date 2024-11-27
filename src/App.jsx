@@ -260,7 +260,10 @@ const App = () => {
               ブース名の場合「文学フリマ」
             </Typography>
             <Typography variant="body2" >
-              カテゴリ名の場合「人文学」
+              ブース名の読み仮名の場合「ぶんがくふりま」
+            </Typography>
+            <Typography variant="body2" >
+              カテゴリ名の場合「評論」
             </Typography>
             <Typography variant="body2" >
               Twitterの場合「@bunfree」
