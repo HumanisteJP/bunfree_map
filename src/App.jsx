@@ -15,29 +15,18 @@ import {
   Fade,
   Stack,
   FormControlLabel,
-  Switch,
-  Snackbar,
-  Alert
+  Switch
 } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import CloseIcon from "@mui/icons-material/Close";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const App = () => {
   const [booths, setBooths] = useState([]);
   const [filteredBooths, setFilteredBooths] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false); // モーダルの開閉状態
-  const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbarの開閉状態
   const [enableDetailSearch, setEnableDetailSearch] = useState(false); // 詳細検索の有効化
   const cardRefs = useRef({}); // 各カードの参照を保持
-
-  // URLクエリから検索クエリを取得
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get("q")?.toLowerCase() || ""; // q パラメータを取得
-    setSearchQuery(query);
-  }, []);
 
   // JSONデータを読み込む
   useEffect(() => {
@@ -46,26 +35,13 @@ const App = () => {
         const response = await fetch("/booth.json");
         const data = await response.json();
         setBooths(data);
-
-        // 検索クエリが既に設定されている場合は検索を実行
-        if (searchQuery) {
-          const filtered = data.filter((booth) =>
-            booth.name?.toLowerCase().includes(searchQuery) ||
-            booth.yomi_of_name?.toLowerCase().includes(searchQuery) ||
-            booth.category?.toLowerCase().includes(searchQuery) ||
-            booth.twitter?.toLowerCase().includes(searchQuery) ||
-            enableDetailSearch && booth.detail?.toLowerCase().includes(searchQuery) ||
-            booth.instagram?.toLowerCase().includes(searchQuery)
-          );
-          setFilteredBooths(filtered);
-        }
       } catch (error) {
         console.error("JSONデータの読み込みに失敗しました", error);
       }
     };
 
     fetchBoothData();
-  }, [searchQuery, enableDetailSearch]);
+  }, []);
 
   // 検索処理
   const handleSearch = () => {
@@ -107,19 +83,6 @@ const App = () => {
   const handleChange = (event) => {
     setEnableDetailSearch(event.target.checked);
   };
-
-  // リンクをクリップボードにコピー
-  const handleCopyLink = (url) => {
-    navigator.clipboard.writeText(url).then(() => {
-      setSnackbarOpen(true); // Snackbarを開く
-    });
-  };
-
-  // Snackbarの閉じる処理
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
   return (
     <>
       <CssBaseline />
@@ -186,25 +149,17 @@ const App = () => {
                 <Card
                   key={booth.id}
                   ref={(el) => (cardRefs.current[booth.id] = el)} // 各カードの参照を設定
-                  style={{ marginBottom: "15px", padding: "10px", maxWidth: 640 }}
+                  style={{ marginBottom: "15px", padding: "10px",maxWidth: 640 }}
                 >
                   <CardContent>
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                      <Typography variant="h6">
-                        <Link href={booth.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {booth.name}
-                        </Link>
-                      </Typography>
-                      <IconButton
-                        onClick={() => handleCopyLink(encodeURI(window.location.origin + `?q=${booth.name}`))}
-                        title="地図のリンクをコピー"
+                    <Typography variant="h6">
+                      <Link href={booth.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        <ContentCopyIcon />
-                      </IconButton>
-                    </Box>
+                        {booth.name}
+                      </Link>
+                    </Typography>
                     <Typography variant="body2">カテゴリ: {booth.category}</Typography>
                     <Typography variant="body2">
                       エリア: {booth.area} / {booth.area_number}
@@ -242,17 +197,95 @@ const App = () => {
         </Container>
       </div>
 
-      {/* Snackbar */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // 右下に配置
+      {/* フッター */}
+      <footer style={{ marginTop: "40px", padding: "20px", backgroundColor: "#f8f9fa", textAlign: "center" }}>
+        <Typography variant="body2">
+          作った人：
+          <Link href="https://x.com/humanistejp" target="_blank" rel="noopener noreferrer">
+            @humanistejp
+          </Link>
+        </Typography>
+        <Typography variant="body2">
+          GitHub リポジトリ：
+          <Link href="https://github.com/HumanisteJP/bunfree_map/" target="_blank" rel="noopener noreferrer">
+            https://github.com/HumanisteJP/bunfree_map/
+          </Link>
+        </Typography>
+        <Typography variant="body2">
+          © 2024 humanistejp. All rights reserved.
+        </Typography>
+      </footer>
+
+      {/* モーダル */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
       >
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: "100%" }}>
-          地図のリンクをコピーしました！
-        </Alert>
-      </Snackbar>
+        <Fade in={open}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+              textAlign: "left"
+            }}
+          >
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Typography variant="h6" >
+                ヘルプ
+              </Typography>
+              <IconButton onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+            <Typography variant="body2" paddingTop={2}>
+              文学フリマ東京39のブースの位置情報をブース名、カテゴリ、SNSアカウント名から検索できます。
+            </Typography>
+            <br />
+            <Typography variant="body2" >
+              検索方法の例：
+            </Typography>
+            <Typography variant="body2" >
+              ブース名の場合「文学フリマ」
+            </Typography>
+            <Typography variant="body2" >
+              ブース名の読み仮名の場合「ぶんがくふりま」
+            </Typography>
+            <Typography variant="body2" >
+              カテゴリ名の場合「評論」
+            </Typography>
+            <Typography variant="body2" >
+              Twitterの場合「@bunfree」
+            </Typography>
+            <Typography variant="body2" >
+              Instagramの場合「bunfree」
+            </Typography>
+            <br />
+            <Typography variant="body2" >
+              使用しているデータは2024/11/27時点のものです。
+            </Typography>
+            <br />
+            <Typography variant="body2" >
+              ⚡紹介文検索を有効にする（有効化するとスマホが重くなる可能性があります。「てにをは」などの助詞といった、たくさん検索結果がヒットしそうな単語の検索はお控えください）：
+            </Typography>
+            <FormControlLabel
+              control={<Switch checked={enableDetailSearch} onChange={handleChange} />}
+              label={enableDetailSearch ? 'ON' : 'OFF'}
+            />
+          </Box>
+        </Fade>
+      </Modal>
     </>
   );
 };
