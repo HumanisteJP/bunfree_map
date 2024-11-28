@@ -199,7 +199,7 @@ const App = () => {
                         </Link>
                       </Typography>
                       <IconButton
-                        onClick={() => handleCopyLink(window.location.origin + `?q=${booth.name}`)}
+                        onClick={() => handleCopyLink(encodeURI(window.location.origin + `?q=${booth.name}`))}
                         title="地図のリンクをコピー"
                       >
                         <ContentCopyIcon />
