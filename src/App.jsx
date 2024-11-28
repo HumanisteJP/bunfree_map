@@ -15,16 +15,20 @@ import {
   Fade,
   Stack,
   FormControlLabel,
-  Switch
+  Switch,
+  Snackbar,
+  Alert
 } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import CloseIcon from "@mui/icons-material/Close";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const App = () => {
   const [booths, setBooths] = useState([]);
   const [filteredBooths, setFilteredBooths] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false); // モーダルの開閉状態
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbarの開閉状態
   const [enableDetailSearch, setEnableDetailSearch] = useState(false); // 詳細検索の有効化
   const cardRefs = useRef({}); // 各カードの参照を保持
 
@@ -35,6 +39,20 @@ const App = () => {
         const response = await fetch("/booth.json");
         const data = await response.json();
         setBooths(data);
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get("q")?.toLowerCase() || ""; // q パラメータを取得
+        setSearchQuery(query);
+        if (query) {
+          const filtered = data.filter((booth) =>
+            booth.name?.toLowerCase().includes(query) ||
+            booth.yomi_of_name?.toLowerCase().includes(query) ||
+            booth.category?.toLowerCase().includes(query) ||
+            booth.twitter?.toLowerCase().includes(query) ||
+            enableDetailSearch && booth.detail?.toLowerCase().includes(query) ||
+            booth.instagram?.toLowerCase().includes(query)
+          );
+          setFilteredBooths(filtered);
+        }
       } catch (error) {
         console.error("JSONデータの読み込みに失敗しました", error);
       }
@@ -83,6 +101,19 @@ const App = () => {
   const handleChange = (event) => {
     setEnableDetailSearch(event.target.checked);
   };
+
+  // リンクをクリップボードにコピー
+  const handleCopyLink = (url) => {
+    navigator.clipboard.writeText(url).then(() => {
+      setSnackbarOpen(true); // Snackbarを開く
+    });
+  };
+
+  // Snackbarの閉じる処理
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <>
       <CssBaseline />
@@ -152,7 +183,16 @@ const App = () => {
                   style={{ marginBottom: "15px", padding: "10px",maxWidth: 640 }}
                 >
                   <CardContent>
-                    <Typography variant="h6">
+              <Box display="flex" justifyContent="flex-end" alignItems="center">
+              <IconButton
+                        onClick={() => handleCopyLink(encodeURI(window.location.origin + `?q=${booth.name}`))}
+                        title="地図のリンクをコピー"
+                      >
+                        <ContentCopyIcon />
+                      </IconButton>
+              </Box>
+              <Box display="flex" justifyContent="center">
+              <Typography variant="h6">
                       <Link href={booth.url}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -160,6 +200,8 @@ const App = () => {
                         {booth.name}
                       </Link>
                     </Typography>
+              </Box>
+
                     <Typography variant="body2">カテゴリ: {booth.category}</Typography>
                     <Typography variant="body2">
                       エリア: {booth.area} / {booth.area_number}
@@ -286,6 +328,17 @@ const App = () => {
           </Box>
         </Fade>
       </Modal>
+            {/* Snackbar */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }} // 右下に配置
+      >
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: "100%" }}>
+          地図のリンクをコピーしました！
+        </Alert>
+      </Snackbar>
     </>
   );
 };
